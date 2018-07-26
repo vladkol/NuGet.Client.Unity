@@ -10,13 +10,19 @@ namespace UnityNuGetSandbox
     {
         static void Main(string[] args)
         {
-            //var t = NuGet.Client.Unity.NuGetUnityHelper.InstallPackage("NuGet.Client");
-            //var t = NuGet.Client.Unity.NuGetUnityHelper.InstallDotnetPackage("Microsoft.Identity.Client", null, "1.1.4-preview0002");
-            // CNTK.UWP.CPUOnly
-            var t = NuGet.Client.Unity.NuGetUnityHelper.GenerateUnityPluginsForNuGet("Microsoft.Identity.Client", null, "1.1.4-preview0002");
+            var t = RunTest();
             t.Wait();
+        }
 
-            string folder = t.Result;
+        static async Task RunTest()
+        {
+            string projectFolder = "NuGetTmp";
+            string targetFolder = "NuGetPlugins";
+
+            await NuGet.Client.Unity.NuGetUnityHelper.AddNuGetPackage(projectFolder, "Microsoft.Identity.Client", null, "1.1.4-preview0002");
+            await NuGet.Client.Unity.NuGetUnityHelper.AddNuGetPackage(projectFolder, "MySql.Data");
+
+            await NuGet.Client.Unity.NuGetUnityHelper.Rebuild(projectFolder, targetFolder);
         }
     }
 }
