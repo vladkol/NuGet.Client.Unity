@@ -74,7 +74,7 @@ namespace NuGet.Client.Unity
             ProcessStartInfo pi = new ProcessStartInfo();
             pi.FileName = "dotnet";
 
-            pi.Arguments = $"remove package {PackageId} --package-directory \"{packagesFolderName}\"";
+            pi.Arguments = $"remove package {PackageId}";
 
             pi.WorkingDirectory = projectFolder;
 
@@ -110,7 +110,9 @@ namespace NuGet.Client.Unity
         {
             string baseFolder = projectFolder;
 
-            Directory.Delete(Path.Combine(projectFolder, "bin"), true);
+            string binFolder = Path.Combine(projectFolder, "bin");
+            if(Directory.Exists(binFolder))
+                Directory.Delete(binFolder, true);
 
             string pluginsFolder = string.Empty;
             if(!string.IsNullOrEmpty(baseFolder))
@@ -160,7 +162,11 @@ namespace NuGet.Client.Unity
                         var runtimeFolder = Path.Combine(Path.Combine(allbuildsFolder, runtime), "publish");
                         if(Directory.Exists(runtimeFolder))
                         {
-                            bOK &= CopyDirectory(runtimeFolder, Path.Combine(pluginsPre, runtime), baseFolderName, null);
+                            var target = Path.Combine(pluginsPre, runtime);
+                            if (Directory.Exists(target))
+                                Directory.Delete(target, true);
+
+                            bOK &= CopyDirectory(runtimeFolder, target, baseFolderName, null);
                         }
                     }
 

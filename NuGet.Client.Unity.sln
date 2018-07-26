@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Client.Unity", "NuGet.Client.Unity\NuGet.Client.Unity.csproj", "{3B229B6B-68F6-4A9B-9FC4-D6DA167074DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGet.Client.Unity", "NuGet.Client.Unity\NuGet.Client.Unity.csproj", "{3B229B6B-68F6-4A9B-9FC4-D6DA167074DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityNuGetSandbox", "UnityNuGetSandbox\UnityNuGetSandbox.csproj", "{38DA9240-DAAD-4A0B-9BA8-3BCA5A7AF408}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.Client.Unity.Test", "NuGet.Client.Unity.Test\NuGet.Client.Unity.Test.csproj", "{70F4CE21-1296-4179-8A67-C6A8E9572490}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{3B229B6B-68F6-4A9B-9FC4-D6DA167074DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B229B6B-68F6-4A9B-9FC4-D6DA167074DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B229B6B-68F6-4A9B-9FC4-D6DA167074DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38DA9240-DAAD-4A0B-9BA8-3BCA5A7AF408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38DA9240-DAAD-4A0B-9BA8-3BCA5A7AF408}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38DA9240-DAAD-4A0B-9BA8-3BCA5A7AF408}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38DA9240-DAAD-4A0B-9BA8-3BCA5A7AF408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F4CE21-1296-4179-8A67-C6A8E9572490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F4CE21-1296-4179-8A67-C6A8E9572490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F4CE21-1296-4179-8A67-C6A8E9572490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F4CE21-1296-4179-8A67-C6A8E9572490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
