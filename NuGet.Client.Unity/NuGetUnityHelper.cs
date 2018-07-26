@@ -15,19 +15,10 @@ namespace NuGet.Client.Unity
         private const string pluginsFolderName = "NuGetUnity.plugins";
         private const string targetFramework = "netstandard2.0";
 
-        private static Dictionary<string, List<string>> runtimesMappings = new Dictionary<string, List<string>>();
 
         static NuGetUnityHelper()
         {
-            runtimesMappings.Add("x64", new List<string>());
-            runtimesMappings["x64"].Add("win-x64");
-            runtimesMappings["x64"].Add("win10-x64");
-            runtimesMappings["x64"].Add("win81-x64");
 
-            runtimesMappings.Add("x86", new List<string>());
-            runtimesMappings["x86"].Add("win-x86");
-            runtimesMappings["x86"].Add("win10-x86");
-            runtimesMappings["x86"].Add("win81-x86");
         }
 
         public static async Task<string> GenerateUnityPluginsForNuGet(string PackageId, string source = null, string version = null, string[] runtimes = null)
@@ -41,7 +32,6 @@ namespace NuGet.Client.Unity
                 if (runtimes == null || runtimes.Length == 0)
                 {
                     runtimeList = new List<string>();
-                    runtimeList.Add(null);
                     runtimeList.Add("win10-x64");
                     runtimeList.Add("win10-x86");
                     runtimeList.Add("osx-x64");
@@ -71,9 +61,12 @@ namespace NuGet.Client.Unity
                 string buildFolder = Path.Combine(baseFolder, Path.Combine("bin", "release"));
                 if (Directory.Exists(buildFolder))
                 {
-                    string[] runtimesFolders = Directory.GetDirectories(Path.Combine(buildFolder, "netstandard2.0"));
+                    string allbuildsFolder = Path.Combine(buildFolder, "netstandard2.0");
+                    foreach(var runtime in runtimeList)
+                    {
+                        string folder = Path.Combine(allbuildsFolder, "netstandard2.0"); 
 
-                    List<string> managedDLLs = Directory.GetFiles(buildFolder, "*.dll").ToList();
+                    }
 
                     pluginsFolder = pluginsPre;
                 }
