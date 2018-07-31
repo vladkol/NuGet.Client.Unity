@@ -60,6 +60,7 @@ namespace NuGet.Client.Unity.Test
             {
                 AddPackage();
             }
+            Assert.True(context.addPackageDone);
 
             string projectFolder = context.projectFolder;
             string targetFolder = context.targetFolder;
