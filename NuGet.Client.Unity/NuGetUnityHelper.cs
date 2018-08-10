@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace NuGet.Client.Unity
     {
         private const string packagesFolderName = "RestoredNuGetPackages";
         private const string targetFramework = "netstandard2.0";
-
+        private const long maxFileSizeForMD5 = 1024 * 1024 * 64;
 
         static NuGetUnityHelper()
         {
@@ -122,6 +123,7 @@ namespace NuGet.Client.Unity
                 if (runtimes == null || runtimes.Length == 0)
                 {
                     runtimeList = new List<string>();
+                    runtimeList.Add("");
                     runtimeList.Add("win10-x64");
                     runtimeList.Add("win10-x86");
                     runtimeList.Add("osx-x64");
@@ -157,16 +159,76 @@ namespace NuGet.Client.Unity
                         Directory.CreateDirectory(pluginsPre);
 
                     bool bOK = true;
+                    string baseRuntimeFolder = string.Empty;
+
                     foreach(var runtime in runtimeList)
                     {
                         var runtimeFolder = Path.Combine(Path.Combine(allbuildsFolder, runtime), "publish");
-                        if(Directory.Exists(runtimeFolder))
+
+                        if (Directory.Exists(runtimeFolder))
                         {
                             var target = Path.Combine(pluginsPre, runtime);
                             if (Directory.Exists(target))
                                 Directory.Delete(target, true);
 
                             bOK &= CopyDirectory(runtimeFolder, target, baseFolderName, null);
+
+                            if (bOK && string.IsNullOrEmpty(runtime))
+                                baseRuntimeFolder = target;
+                        }
+                    }
+
+                    // remove duplicates from runtimes 
+                    if(bOK && !string.IsNullOrEmpty(baseRuntimeFolder))
+                    {
+                        var allRuntimesNotNeeded = Path.Combine(baseRuntimeFolder, "runtimes");
+                        if(Directory.Exists(allRuntimesNotNeeded))
+                            Directory.Delete(allRuntimesNotNeeded, true);
+
+                        var files = Directory.GetFiles(baseRuntimeFolder).Select(f => Path.GetFileName(f));
+                        var subfolders = Directory.GetDirectories(baseRuntimeFolder);
+                        MD5 md5 = MD5.Create();
+
+                        foreach (var f in files)
+                        {
+                            var fpath = Path.Combine(baseRuntimeFolder, f);
+                            FileInfo fi = new FileInfo(fpath);
+                            byte[] baseHash = null;
+
+                            foreach (var fld in subfolders)
+                            {
+                                var thisPath = Path.Combine(fld, f);
+                                if (!File.Exists(thisPath))
+                                    continue;
+
+                                FileInfo fi1 = new FileInfo(thisPath);
+
+                                if (fi1.Length != fi.Length) // different file size? Files are different! 
+                                    continue;
+
+                                if (baseHash == null) // baseHash is null? Yes, we may never copute it if we don't have anything to compare with 
+                                {
+                                    if (fi.Length > maxFileSizeForMD5)
+                                        continue;
+                                    using (var stream = File.OpenRead(fpath))
+                                    {
+                                        baseHash = md5.ComputeHash(stream);
+                                    }
+                                }
+
+                                if (baseHash != null)
+                                {
+                                    byte[] thisHash = null;
+                                    using (var stream = File.OpenRead(thisPath))
+                                    {
+                                        thisHash = md5.ComputeHash(stream);
+                                    }
+
+                                    bool bEq = thisHash.SequenceEqual(baseHash);
+                                    if (bEq)
+                                        File.Delete(thisPath);
+                                }
+                            }
                         }
                     }
 
