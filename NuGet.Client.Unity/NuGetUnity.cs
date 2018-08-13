@@ -14,6 +14,7 @@ namespace NuGet.Client.Unity
     {
         private const string packagesFolderName = "RestoredNuGetPackages";
         private const string targetFramework = "netstandard2.0";
+        private const string allBuildFolderName = targetFramework;
         private const long maxFileSizeForMD5 = 1024 * 1024 * 64;
 
         static NuGetUnity()
@@ -153,7 +154,7 @@ namespace NuGet.Client.Unity
                 if (Directory.Exists(buildFolder))
                 {
                     string baseFolderName = Path.GetFileName(baseFolder);
-                    string allbuildsFolder = Path.Combine(buildFolder, "netstandard2.0");
+                    string allbuildsFolder = Path.Combine(buildFolder, allBuildFolderName);
 
                     if (!Directory.Exists(pluginsPre))
                         Directory.CreateDirectory(pluginsPre);
